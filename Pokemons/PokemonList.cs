@@ -1,12 +1,18 @@
+using System.Text.Json.Serialization;
+
 namespace Tamagotchi.Pokemons;
 
 internal class PokemonList
 {
+    [JsonPropertyName("results")]
     public List<ResultDetails>? Results { get; set; }
 }
 public class ResultDetails
 {
+    [JsonPropertyName("name")]
     public string? Name { get; set; }
+
+    [JsonPropertyName("url")]
     public string? Url { get; set; }
 
     public void PrintDetails()

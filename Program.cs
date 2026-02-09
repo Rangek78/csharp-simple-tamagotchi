@@ -1,1 +1,1 @@
-﻿Menus.MainMenu();
+﻿Menus.MainMenu(new Player("MyName"));
