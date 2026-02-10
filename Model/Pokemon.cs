@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Tamagotchi.Pokemons;
+namespace Tamagotchi.Model;
 
 internal class Pokemon
 {

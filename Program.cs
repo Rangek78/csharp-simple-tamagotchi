@@ -1,1 +1,3 @@
-﻿Menus.MainMenu(new Player("MyName"));
+﻿using Tamagotchi.Controller;
+
+Controller.Play(new Player("MyName"));

@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Tamagotchi.Pokemons;
+namespace Tamagotchi.Model;
 
 internal class PokemonList
 {

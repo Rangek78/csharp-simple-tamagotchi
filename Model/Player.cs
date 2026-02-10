@@ -1,4 +1,4 @@
-using Tamagotchi.Pokemons;
+using Tamagotchi.Model;
 
 internal class Player
 {
@@ -20,6 +20,11 @@ internal class Player
 
     public void AdoptedPokemon()
     {
+        if (Adopted!.Count == 0)
+        {
+            Console.WriteLine("[ No Pokémon has been adopted yet ]");
+            return;
+        }
         foreach (var pokemon in Adopted!)
         {
             Console.WriteLine($"{pokemon.Name}");
