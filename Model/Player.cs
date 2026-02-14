@@ -4,7 +4,7 @@ internal class Player
 {
 
     public string? Name { get; set; }
-    private List<Pokemon>? Adopted { get; }
+    private List<Mascot>? Adopted { get; }
 
     public Player(string? name)
     {
@@ -12,8 +12,17 @@ internal class Player
         Name = name;
     }
 
+    public Mascot GetMascot(int index)
+    {
+        return Adopted![index];
+    }
 
-    public void Adopt(Pokemon pokemon)
+    public int GetMascotCount()
+    {
+        return Adopted!.Count;
+    }
+
+    public void Adopt(Mascot pokemon)
     {
         Adopted!.Add(pokemon);
     }
@@ -22,12 +31,12 @@ internal class Player
     {
         if (Adopted!.Count == 0)
         {
-            Console.WriteLine("[ No Pokémon has been adopted yet ]");
+            Console.WriteLine("[ No Pokémon have been adopted yet ]");
             return;
         }
-        foreach (var pokemon in Adopted!)
+        for (int i = 0; i < Adopted.Count; i++)
         {
-            Console.WriteLine($"{pokemon.Name}");
+            Console.WriteLine($"{i + 1}. {Adopted[i].Name} - Satiation: {Adopted[i].GetSatiation()}, Humor: {Adopted[i].GetHumor()}, Energy: {Adopted[i].GetEnergy()}");
         }
     }
 }

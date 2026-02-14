@@ -5,7 +5,7 @@ namespace Tamagotchi.Model;
 internal class PokemonSpecies
 {
     [JsonProperty("evolution_chain")]
-    public EvoChain? EvoChainId;
+    public EvoChain? EvoChainId { get; set; }
 
     [JsonProperty("capture_rate")]
     public byte CaptureRate { get; set; }

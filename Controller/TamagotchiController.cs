@@ -11,21 +11,21 @@ internal class Controller
         do
         {
             View.MainMenu(player);
-            var option = Console.ReadLine();
+            var option = char.ToLower(Console.ReadKey(true).KeyChar);
 
             try
             {
                 switch (option)
                 {
-                    case "1":
+                    case '1':
                         View.ListPokemonMenu();
                         ListPokemon();
                         break;
-                    case "2":
+                    case '2':
                         View.SelectPokemonMenu();
                         SelectPokemon();
                         break;
-                    case "3":
+                    case '3':
                         View.AdoptPokemonMenu();
                         var pokemon = PokemonForAdoption();
 
@@ -35,16 +35,25 @@ internal class Controller
                             Console.WriteLine("The Pokémon has been left alone");
                         else
                         {
-                            player.Adopt(pokemon);
+                            player.Adopt(new Mascot(pokemon));
                             Console.WriteLine("The Pokémon has been added to your adopted list");
                         }
                         break;
-                    case "4":
+                    case '4':
                         View.ViewAdoptedMenu(player);
                         ViewAdopted(player);
+                        if (player.GetMascotCount() > 0)
+                        {
+                            View.SelectAdoptedMenu();
+                            var mascot = SelectAdopted(player);
+                            if (mascot != null)
+                                TakeActionOnAdopted(mascot);
+
+                            Console.Clear();
+                            continue;
+                        }
                         break;
-                    case "q":
-                    case "Q":
+                    case 'q':
                         return;
                     default:
                         Console.WriteLine("Invalid option. Try again.");
@@ -61,14 +70,75 @@ internal class Controller
         } while (true);
     }
 
+    private static void TakeActionOnAdopted(Mascot mascot)
+    {
+        while (true)
+        {
+            View.TakeActionOnAdoptedMenu(mascot);
+            Console.Write("\nYour option: ");
+            var option = char.ToLower(Console.ReadKey(true).KeyChar);
+
+            switch (option)
+            {
+                case '1':
+                    mascot.FeedMascot();
+                    Console.WriteLine($"{mascot.Name} has been fed - it is {mascot.GetSatiation()}");
+                    break;
+                case '2':
+                    mascot.PlayWithMascot();
+                    Console.WriteLine($"You played with {mascot.Name} - it is {mascot.GetHumor()}");
+                    break;
+                case '3':
+                    mascot.PutMascotToSleep();
+                    Console.WriteLine($"{mascot.Name} has slept and is now awaken - it is {mascot.GetEnergy()}");
+                    break;
+                case 'q':
+                    return;
+                default:
+                    Console.WriteLine("Invalid option. Try again.");
+                    break;
+            }
+
+            Console.ReadKey();
+            Console.Clear();
+        }
+    }
+
     private static void ViewAdopted(Player player)
     {
         player.AdoptedPokemon();
     }
 
+    private static Mascot SelectAdopted(Player player)
+    {
+        while (true)
+        {
+            Console.Write("\nYour option: ");
+            var option = char.ToLower(Console.ReadKey(true).KeyChar);
+
+            if (option!.Equals('q'))
+                return null!;
+
+            try
+            {
+                var index = (int)char.GetNumericValue(option) - 1;
+                return player.GetMascot(index);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("Invalid mascot number");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Invalid option");
+            }
+            Console.ReadKey();
+        }
+    }
+
     private static Pokemon PokemonForAdoption()
     {
-        var input = Console.ReadLine();
+        var input = Console.ReadLine()!.ToLower();
         Pokemon pokemon = JsonConvert.DeserializeObject<Pokemon>(GetAPI.GetPokemon(input!, "pokemon"))!;
         if (pokemon.Name == null)
             throw new Exception("Invalid name or id");
@@ -81,18 +151,17 @@ internal class Controller
         {
             View.AdoptPokemonSubMenu(pokemon);
             Console.Write("\nYour option: ");
-            var option = Console.ReadLine();
+            var option = char.ToLower(Console.ReadKey(true).KeyChar);
 
             switch (option)
             {
-                case "1":
+                case '1':
                     View.DetailsMenu();
                     SpeciesDetails(pokemon);
                     break;
-                case "2":
+                case '2':
                     return true;
-                case "q":
-                case "Q":
+                case 'q':
                     return false;
                 default:
                     Console.WriteLine("Invalid option. Try again.");
@@ -112,7 +181,7 @@ internal class Controller
     }
     public static void SelectPokemon()
     {
-        var input = Console.ReadLine();
+        var input = Console.ReadLine()!.ToLower();
         Pokemon pokemon = JsonConvert.DeserializeObject<Pokemon>(GetAPI.GetPokemon(input!, "pokemon"))!;
         if (pokemon.Name == null)
             throw new Exception("Invalid name or id");
