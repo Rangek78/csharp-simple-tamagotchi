@@ -28,7 +28,6 @@ internal class Controller
                     case '3':
                         View.AdoptPokemonMenu();
                         var pokemon = PokemonForAdoption();
-
                         var willAdopt = AdoptOrNot(pokemon);
 
                         if (!willAdopt)
@@ -139,6 +138,7 @@ internal class Controller
     private static Pokemon PokemonForAdoption()
     {
         var input = Console.ReadLine()!.ToLower();
+        Console.Write("Loading...\r");
         Pokemon pokemon = JsonConvert.DeserializeObject<Pokemon>(GetAPI.GetPokemon(input!, "pokemon"))!;
         if (pokemon.Name == null)
             throw new Exception("Invalid name or id");
@@ -175,6 +175,7 @@ internal class Controller
 
     public static void ListPokemon()
     {
+        Console.Write("Loading...\r");
         PokemonList pokemonList = JsonConvert.DeserializeObject<PokemonList>(GetAPI.GetPokemon("", "pokemon"))!;
         foreach (var pokemon in pokemonList.Results!)
             pokemon.PrintDetails();
@@ -182,6 +183,7 @@ internal class Controller
     public static void SelectPokemon()
     {
         var input = Console.ReadLine()!.ToLower();
+        Console.Write("\nLoading...\r");
         Pokemon pokemon = JsonConvert.DeserializeObject<Pokemon>(GetAPI.GetPokemon(input!, "pokemon"))!;
         if (pokemon.Name == null)
             throw new Exception("Invalid name or id");
