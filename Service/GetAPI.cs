@@ -1,3 +1,5 @@
+namespace Tamagotchi.Service;
+
 using RestSharp;
 
 internal class GetAPI

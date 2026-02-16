@@ -1,5 +1,6 @@
 namespace Tamagotchi.Controller;
 
+using Tamagotchi.Service;
 using MapsterMapper;
 using Newtonsoft.Json;
 using Tamagotchi.Model;
