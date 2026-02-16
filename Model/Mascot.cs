@@ -2,15 +2,18 @@ namespace Tamagotchi.Model;
 
 using System.Timers;
 
-internal class Mascot : Pokemon
+internal class Mascot
 {
+    public string? Name { get; set; }
+    public int Weight { get; set; }
+    public List<AbilityDesc>? Abilities { get; set; }
     private int _satiation { get; set; }
-    private int _humor { get; set; }
+    private int _mood { get; set; }
     private int _energy { get; set; }
 
-    private Timer hungerTimer { get; set; }
-    private Timer sadnessTimer { get; set; }
-    private Timer sleepTimer { get; set; }
+    private Timer hungerTimer = new(60e3 * 5);
+    private Timer sadnessTimer = new(60e3 * 5);
+    private Timer sleepTimer = new(60e3 * 5);
 
     private static int CheckRange(int value)
     {
@@ -34,13 +37,13 @@ internal class Mascot : Pokemon
 
     }
 
-    private int Humor
+    private int Mood
     {
-        get => _humor;
+        get => _mood;
         set
         {
             sadnessTimer.Stop();
-            _humor = CheckRange(value);
+            _mood = CheckRange(value);
             sadnessTimer.Start();
         }
     }
@@ -56,37 +59,30 @@ internal class Mascot : Pokemon
         }
     }
 
-    public Mascot(Pokemon pokemon)
+    public Mascot()
     {
-        Name = pokemon.Name;
-        Abilities = pokemon.Abilities;
-        Height = pokemon.Height;
-        Id = pokemon.Id;
-        Name = pokemon.Name;
-        Weight = pokemon.Weight;
+        InitializeTimers();
+    }
 
-        var oneMinute = 60000;
-
-        hungerTimer = new Timer(oneMinute * 5);
+    private void InitializeTimers()
+    {
         hungerTimer.Elapsed += OnTimedEvent!;
         hungerTimer.Enabled = true;
 
-        sadnessTimer = new Timer(oneMinute * 5);
         sadnessTimer.Elapsed += OnTimedEvent!;
         sadnessTimer.Enabled = true;
 
-        sleepTimer = new Timer(oneMinute * 60);
         sleepTimer.Elapsed += OnTimedEvent!;
         sleepTimer.Enabled = true;
 
         Satiation = 5;
-        Humor = 5;
+        Mood = 5;
         Energy = 10;
     }
 
     public void PlayWithMascot()
     {
-        Humor += 2;
+        Mood += 2;
         Satiation--;
         Energy--;
     }
@@ -94,7 +90,7 @@ internal class Mascot : Pokemon
     public void FeedMascot()
     {
         Satiation += 4;
-        Humor += 3;
+        Mood += 3;
         Energy++;
     }
 
@@ -103,15 +99,20 @@ internal class Mascot : Pokemon
         Energy = 10;
     }
 
-    public new void ShowDetails()
+    public void ShowDetails()
     {
-        base.ShowDetails();
+        Console.WriteLine($"Pokémon: {Name}, Weight: {Weight}\nAbilities:");
+        Abilities!.ForEach(ability => ability.DescribeAbility());
+        foreach (var ability in Abilities)
+        {
+            Console.WriteLine(ability.DescribeAbility());
+        }
         Console.WriteLine($"{Name} is {GetHumor()}, {GetSatiation()} and {GetEnergy()}");
     }
 
     public string GetHumor()
     {
-        switch (Humor)
+        switch (Mood)
         {
             case int h when h > 7:
                 return "happy";
@@ -157,6 +158,6 @@ internal class Mascot : Pokemon
     private void OnTimedEvent(object source, ElapsedEventArgs e)
     {
         Satiation--;
-        Humor--;
+        Mood--;
     }
 }

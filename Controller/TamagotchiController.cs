@@ -1,12 +1,17 @@
 namespace Tamagotchi.Controller;
 
+using MapsterMapper;
 using Newtonsoft.Json;
 using Tamagotchi.Model;
 using Tamagotchi.View;
 
 internal class Controller
 {
-    public static void Play(Player player)
+    private readonly IMapper mapper = new Mapper();
+
+    public Controller() { }
+
+    public void Play(Player player)
     {
         do
         {
@@ -34,7 +39,7 @@ internal class Controller
                             Console.WriteLine("The Pokémon has been left alone");
                         else
                         {
-                            player.Adopt(new Mascot(pokemon));
+                            player.Adopt(mapper.Map<Mascot>(pokemon));
                             Console.WriteLine("The Pokémon has been added to your adopted list");
                         }
                         break;

@@ -29,30 +29,31 @@ internal class Pokemon
         }
     }
 
-    internal class AbilityDesc
+}
+
+internal class AbilityDesc
+{
+    [JsonProperty("ability")]
+    public Desc? Ability { get; set; }
+
+    [JsonProperty("is_hidden")]
+    public bool IsHidden { get; set; }
+
+    [JsonProperty("slot")]
+    public int Slot { get; set; }
+
+    public string DescribeAbility()
     {
-        [JsonProperty("ability")]
-        public Desc? Ability { get; set; }
+        return $"{Ability!.Name}, Slot {Slot}";
+    }
 
-        [JsonProperty("is_hidden")]
-        public bool IsHidden { get; set; }
+    internal class Desc
+    {
 
-        [JsonProperty("slot")]
-        public int Slot { get; set; }
+        [JsonProperty("name")]
+        public string? Name { get; set; }
 
-        public string DescribeAbility()
-        {
-            return $"{Ability!.Name}, Slot {Slot}";
-        }
-
-        internal class Desc
-        {
-
-            [JsonProperty("name")]
-            public string? Name { get; set; }
-
-            [JsonProperty("url")]
-            public string? Url { get; set; }
-        }
+        [JsonProperty("url")]
+        public string? Url { get; set; }
     }
 }

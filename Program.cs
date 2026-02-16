@@ -1,3 +1,4 @@
 ﻿using Tamagotchi.Controller;
 
-Controller.Play(new Player("MyName"));
+var controller = new Controller();
+controller.Play(new Player("MyName"));
